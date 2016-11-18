@@ -1,0 +1,72 @@
+<html>
+
+<head>
+  <title>Random Number Generator</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  
+  <div style="margin:100px;">
+    
+    <nav class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <p class="navbar-brand">Random Number Generator</p>
+      </div>
+    </nav>
+    
+    <div class="jumbotron"  style="padding:40px;">
+      <p>This is an application to generate unique random numbers between 1 and 10000 (inclusive). Click the button 'Generate' to generate numbers.</p>
+      <input 
+        class="btn btn-primary"
+        id="gen" 
+        name="gen" 
+        type="submit" 
+        value="Generate"
+      >
+      
+      <div style="word-wrap: break-word;overflow-wrap: break-word;width: 100%;" id="val">
+        <%=uniqueRandomNumbers%>
+      </div>
+      
+      <input 
+        class="btn btn-default" 
+        id="load"
+        name="load"  
+        style="display: none;"
+        type="submit" 
+        value="Load more"
+      >
+
+      <script>
+        
+        var response;
+
+        $('#gen').click(function(){ // Click event for Generate
+          $('#gen').val('Try Again');
+          
+          $.get('/ajax', function(res) {
+            response = res;
+            document.getElementById('load').style.display = "block"; // Display Load more option
+            $('#val').text(res.slice(0, 300)); // Display first 300 numbers 
+          });
+        
+        });
+
+        $("#load").click(function(e){ // Click event for Load more
+          e.preventDefault();
+          $("#val").text(response);
+          document.getElementById('load').style.display = "none"; 
+        });
+        
+        $.get('/', function(res) {
+          $('#val').text('');
+        });
+      </script>
+    </div>
+  </div>
+</body>
+</html>
